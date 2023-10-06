@@ -1,0 +1,67 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host = https://localhost:7296
+@contentType = application/json
+@token = token
+@refresh = token
+
+### Register(create) new account
+POST {{host}}/api/v1/account
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro22",
+  "givenName": "Pedro",
+  "familyName": "Silva",
+  "email": "darthpedro22@gmail.com",
+  "password": "Password123!",
+  "phoneNumber": "(555)425-5555"
+}
+
+### Login
+POST {{host}}/api/v1/account/login
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro",
+  "password": "Password123!"
+}
+
+### Change password
+PATCH {{host}}/api/v1/account/password
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "currentPassword": "Password123!",
+  "newPassword": "Password123!5"
+}
+
+### Update account
+PUT {{host}}/api/v1/account
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "userName": "DarthPedro",
+  "givenName": "Pedro",
+  "familyName": "Silva",
+  "email": "darthpedro@gmail.com",
+  "phoneNumber": "(555)425-5555"
+}
+
+
+### Get account
+GET {{host}}/api/v1/account
+Authorization: Bearer {{token}}
+
+### Delete account
+DELETE {{host}}/api/v1/account
+Authorization: Bearer {{token}}
+
+### Refresh access token
+POST {{host}}/api/v1/account/token/refresh
+Authorization: Bearer {{refresh}}
+
+### Get token claims
+GET {{host}}/api/v1/account/claims
+Authorization: Bearer {{token}}
