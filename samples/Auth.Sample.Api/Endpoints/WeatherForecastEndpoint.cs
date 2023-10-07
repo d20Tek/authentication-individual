@@ -14,8 +14,11 @@ internal static class WeatherForecastEndpoint
     public static IEndpointRouteBuilder MapWeatherForecastEndpoints(
         this IEndpointRouteBuilder routeBuilder)
     {
-        routeBuilder.MapGet("/weatherforecast", GetWeatherForecasts)
+        routeBuilder.MapGet("/api/v1/weatherforecast", GetWeatherForecasts)
             .WithName("GetWeatherForecast")
+            .Produces<WeatherForecast>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .RequireAuthorization()
             .WithOpenApi();
 
         return routeBuilder;

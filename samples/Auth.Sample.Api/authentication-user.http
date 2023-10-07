@@ -9,10 +9,10 @@ POST {{host}}/api/v1/account
 Content-Type: {{contentType}}
 
 {
-  "userName": "DarthPedro22",
+  "userName": "DarthPedro",
   "givenName": "Pedro",
   "familyName": "Silva",
-  "email": "darthpedro22@gmail.com",
+  "email": "darthpedro@gmail.com",
   "password": "Password123!",
   "phoneNumber": "(555)425-5555"
 }
@@ -64,4 +64,8 @@ Authorization: Bearer {{refresh}}
 
 ### Get token claims
 GET {{host}}/api/v1/account/claims
+Authorization: Bearer {{token}}
+
+### Get weather forecast
+GET {{host}}/api/v1/weatherforecast
 Authorization: Bearer {{token}}
