@@ -3,6 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Minimal.Endpoints;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -26,5 +27,11 @@ public static class DependencyInjection
         });
 
         return services;
+    }
+
+    public static IEndpointRouteBuilder MapAuthenticationApiEndpoints(
+        this IEndpointRouteBuilder routeBuilder)
+    {
+        return routeBuilder.MapApiEndpoints();
     }
 }

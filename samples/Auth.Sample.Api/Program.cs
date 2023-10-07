@@ -4,13 +4,14 @@
 using Auth.Sample.Api.Endpoints;
 using D20Tek.Authentication.Individual;
 using D20Tek.Authentication.Individual.Api;
-using D20Tek.Minimal.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// add individual authentication services and endpoints to this WebApi
 builder.Services.AddIndividualAuthentication(builder.Configuration);
 builder.Services.AddAuthenticationApiEndpoints();
 
+// required Cors settings
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(config =>
         config.AllowAnyOrigin()
@@ -37,6 +38,8 @@ app.UseAuthorization();
 
 app.MapGet("/", () => "Authentication Sample WebApi");
 app.MapWeatherForecastEndpoints();
-app.MapApiEndpoints();
+
+// map the authentication endpoint routes for this WebApi
+app.MapAuthenticationApiEndpoints();
 
 app.Run();
