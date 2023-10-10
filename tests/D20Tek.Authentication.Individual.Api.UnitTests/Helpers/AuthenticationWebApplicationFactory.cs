@@ -11,6 +11,7 @@ using D20Tek.Minimal.Result;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace D20Tek.Authentication.Individual.Api.UnitTests.Helpers;
 
@@ -50,10 +51,7 @@ internal class AuthenticationWebApplicationFactory : WebApplicationFactory<Progr
 
             // Add test data to the DbContext
             result = await handler.HandleAsync(register, CancellationToken.None);
-            if (result.IsFailure)
-            {
-                throw new InvalidOperationException();
-            }
+            EnsureSuccess(result);
         }
         else
         {
@@ -62,11 +60,7 @@ internal class AuthenticationWebApplicationFactory : WebApplicationFactory<Progr
             result = await handler.HandleAsync(
                 new LoginQuery(register.UserName, register.Password),
                 CancellationToken.None);
-
-            if (result.IsFailure)
-            {
-                throw new InvalidOperationException();
-            }
+            EnsureSuccess(result);
         }
         
         return result.Value;
@@ -87,5 +81,14 @@ internal class AuthenticationWebApplicationFactory : WebApplicationFactory<Progr
     {
         var scope = Services.CreateScope();
         return scope.ServiceProvider.GetRequiredService<IChangeRoleCommandHandler>();
+    }
+
+    [ExcludeFromCodeCoverage]
+    internal void EnsureSuccess(Result<AuthenticationResult> result)
+    {
+        if (result.IsFailure)
+        {
+            throw new InvalidOperationException();
+        }
     }
 }
