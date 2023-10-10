@@ -4,6 +4,7 @@
 using D20Tek.Authentication.Individual.Abstractions;
 using D20Tek.Authentication.Individual.Infrastructure;
 using D20Tek.Authentication.Individual.UseCases;
+using D20Tek.Authentication.Individual.UseCases.ChangeRole;
 using D20Tek.Authentication.Individual.UseCases.Login;
 using D20Tek.Authentication.Individual.UseCases.Register;
 using D20Tek.Minimal.Result;
@@ -81,4 +82,10 @@ internal class AuthenticationWebApplicationFactory : WebApplicationFactory<Progr
 
     public IJwtTokenGenerator GetJwtTokenGenerator() =>
         Services.GetRequiredService<IJwtTokenGenerator>();
+
+    public IChangeRoleCommandHandler GetChangeRoleCommandHandler()
+    {
+        var scope = Services.CreateScope();
+        return scope.ServiceProvider.GetRequiredService<IChangeRoleCommandHandler>();
+    }
 }

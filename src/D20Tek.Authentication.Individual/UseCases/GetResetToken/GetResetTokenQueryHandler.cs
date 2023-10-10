@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
-namespace D20Tek.Authentication.Individual.UseCases.ResetPassword;
+namespace D20Tek.Authentication.Individual.UseCases.GetResetToken;
 
 internal sealed class GetResetTokenQueryHandler : IGetResetTokenQueryHandler
 {
