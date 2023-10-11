@@ -1,7 +1,7 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
-using D20Tek.Authentication.Individual.UseCases.ResetPassword;
+using D20Tek.Authentication.Individual.UseCases.GetResetToken;
 using D20Tek.Minimal.Endpoints;
 
 namespace D20Tek.Authentication.Individual.Api;

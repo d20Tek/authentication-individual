@@ -24,7 +24,6 @@ internal class Configuration
         {
             Config.Produces<AuthenticationResponse>(StatusCodes.Status201Created),
             Config.ProducesProblem(StatusCodes.Status409Conflict),
-            Config.ProducesProblem(StatusCodes.Status404NotFound),
             Config.ProducesValidationProblem(StatusCodes.Status400BadRequest)
         });
 

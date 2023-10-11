@@ -82,16 +82,22 @@ internal class UpdateCommandHandler : IUpdateCommandHandler
 
         // 3. verify user isn't trying to use another account's user name
         var nameAccount = await _accountRepository.GetByUserNameAsync(command.UserName);
-        if ((nameAccount is not null) && (nameAccount.Id != existingAccount.Id))
+        if (nameAccount is not null)
         {
-            return Errors.UserAccount.UserNameAlreadyInUse;
+            if (nameAccount.Id != existingAccount.Id)
+            {
+                return Errors.UserAccount.UserNameAlreadyInUse;
+            }
         }
 
         // 4. verify user isn't trying to use another account's email
         var emailAccount = await _accountRepository.GetByEmailAsync(command.Email);
-        if ((emailAccount is not null) && (emailAccount.Id != existingAccount.Id))
+        if (emailAccount is not null)
         {
-            return Errors.UserAccount.EmailAlreadyInUse;
+            if (emailAccount.Id != existingAccount.Id)
+            {
+                return Errors.UserAccount.EmailAlreadyInUse;
+            }
         }
 
         return existingAccount;

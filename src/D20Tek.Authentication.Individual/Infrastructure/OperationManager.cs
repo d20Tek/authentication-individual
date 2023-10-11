@@ -42,7 +42,13 @@ internal class OperationManager
             var result = await operation.Invoke();
             if (result.Succeeded is false)
             {
-                _logger.LogError($"{_className}.{caller} failed: {result.Errors.First()}");
+                var message = $"{_className}.{caller} failed.";
+                if (result.Errors.Any())
+                {
+                    message = $"{_className}.{caller} failed: {result.Errors.First()}";
+                }
+
+                _logger.LogError(message);
             }
 
             return result;

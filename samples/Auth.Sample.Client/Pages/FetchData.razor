@@ -1,5 +1,6 @@
 ﻿@page "/fetchdata"
 @inject HttpClient Http
+@attribute [Authorize]
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -9,7 +10,7 @@
 
 @if (forecasts == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@message</em></p>
 }
 else
 {
@@ -38,10 +39,19 @@ else
 
 @code {
     private WeatherForecast[]? forecasts;
+    string message = "Loading...";
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        try
+        {
+            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>(
+                "https://localhost:7296/api/v1/weatherforecast");
+        }
+        catch (Exception ex)
+        {
+            message = $"HttpClient request failure: {ex.Message}.";
+        }
     }
 
     public class WeatherForecast

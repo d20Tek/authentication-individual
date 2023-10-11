@@ -11,18 +11,15 @@ namespace D20Tek.Authentication.Individual.UseCases.ChangeRole;
 internal class ChangeRoleCommandHandler : IChangeRoleCommandHandler
 {
     private readonly IUserAccountRepository _accountRepository;
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly ChangeRoleCommandValidator _validator;
     private readonly ILogger _logger;
 
     public ChangeRoleCommandHandler(
         IUserAccountRepository accountRepository,
-        IJwtTokenGenerator jwtTokenGenerator,
         ChangeRoleCommandValidator validator,
         ILogger<ChangeRoleCommandHandler> logger)
     {
         _accountRepository = accountRepository;
-        _jwtTokenGenerator = jwtTokenGenerator;
         _validator = validator;
         _logger = logger;
     }
