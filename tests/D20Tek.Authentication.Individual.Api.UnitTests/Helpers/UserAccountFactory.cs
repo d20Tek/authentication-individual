@@ -23,4 +23,23 @@ internal static class AccountCommandFactory
             password!,
             phoneNumber);
     }
+
+    public static UserAccount CreateAccount(
+        string userName,
+        string? givenName = "Tester",
+        string? familyName = "McTest",
+        string? email = "tester@test.com",
+        string? password = "Password123!",
+        string? phoneNumber = null)
+    {
+        return new UserAccount
+        {
+            UserName = userName,
+            GivenName = givenName!,
+            FamilyName = familyName!,
+            Email = email!,
+            PasswordHash = password!,
+            PhoneNumber = phoneNumber
+        };
+    }
 }

@@ -17,25 +17,35 @@ namespace D20Tek.Authentication.Individual.Api.UnitTests.Helpers;
 
 internal class AuthenticationWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private readonly bool _byPassSqlDb;
+
+    public AuthenticationWebApplicationFactory(bool byPassSqlDb = true)
+    {
+        _byPassSqlDb = byPassSqlDb;    
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services =>
+        if (_byPassSqlDb)
         {
-            // Replace the real database context with an in-memory database
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                    typeof(DbContextOptions<UserAccountDbContext>));
-
-            if (descriptor != null)
+            builder.ConfigureServices(services =>
             {
-                services.Remove(descriptor);
-            }
+                // Replace the real database context with an in-memory database
+                var descriptor = services.SingleOrDefault(
+                    d => d.ServiceType ==
+                        typeof(DbContextOptions<UserAccountDbContext>));
 
-            services.AddDbContext<UserAccountDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("InMemoryDbForTesting");
+                if (descriptor != null)
+                {
+                    services.Remove(descriptor);
+                }
+
+                services.AddDbContext<UserAccountDbContext>(options =>
+                {
+                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+                });
             });
-        });
+        }
     }
 
     public async Task<AuthenticationResult> RegisterTestUser(RegisterCommand register)
@@ -81,6 +91,12 @@ internal class AuthenticationWebApplicationFactory : WebApplicationFactory<Progr
     {
         var scope = Services.CreateScope();
         return scope.ServiceProvider.GetRequiredService<IChangeRoleCommandHandler>();
+    }
+
+    public UserAccountDbContext GetDbContext()
+    {
+        var scope = Services.CreateScope();
+        return scope.ServiceProvider.GetRequiredService<UserAccountDbContext>();
     }
 
     [ExcludeFromCodeCoverage]

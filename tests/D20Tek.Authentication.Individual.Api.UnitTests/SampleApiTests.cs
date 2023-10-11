@@ -26,7 +26,9 @@ public class SampleApiTests
     public async Task GetHome_ReturnsPlainText()
     {
         // arrange
-        using var client = _factory.CreateClient();
+        var homeFactory = new AuthenticationWebApplicationFactory(false);
+        using var client = homeFactory.CreateClient();
+        _ = homeFactory.GetDbContext();
 
         // act
         var response = await client.GetAsync("/");
