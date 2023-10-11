@@ -12,11 +12,22 @@ internal class MockAccountRepository : IUserAccountRepository
 {
     private readonly UserAccount? _defaultTestAccount;
     private readonly List<string> _defaultRoles;
+    private readonly bool _allowCreate;
+    private readonly bool _getDuplicateUserName;
+    private readonly bool _getDuplicateEmail;
 
-    public MockAccountRepository(UserAccount? defaultTestAccount = null, List<string>? roles = null)
+    public MockAccountRepository(
+        UserAccount? defaultTestAccount = null,
+        List<string>? roles = null,
+        bool allowCreate = false,
+        bool getDuplicateUserName = false,
+        bool getDuplicateEmail = false)
     {
         _defaultTestAccount = defaultTestAccount;
         _defaultRoles = roles ?? new List<string>();
+        _allowCreate = allowCreate;
+        _getDuplicateUserName = getDuplicateUserName;
+        _getDuplicateEmail = getDuplicateEmail;
     }
 
     public Task<bool> AttachUserRoleAsync(UserAccount userAccount, string userRole)
@@ -39,21 +50,40 @@ internal class MockAccountRepository : IUserAccountRepository
 
     public Task<IdentityResult> CreateAsync(UserAccount userAccount, string password)
     {
-        throw new NotImplementedException();
+        if (_allowCreate)
+        {
+            return Task.FromResult(IdentityResult.Success);
+        }
+
+        return Task.FromResult(IdentityResult.Failed(new IdentityError
+        {
+            Code = "Test.Error",
+            Description = "Test failure."
+        }));
     }
 
     public Task<IdentityResult> DeleteAsync(UserAccount userAccount)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(IdentityResult.Failed(new IdentityError
+        {
+            Code = "Test.Error",
+            Description = "Remove test failure."
+        }));
     }
 
     public Task<string?> GeneratePasswordResetTokenAsync(UserAccount userAccount)
     {
-        throw new NotImplementedException();
+        return Task.FromResult<string?>(null);
     }
 
     public Task<UserAccount?> GetByEmailAsync(string email)
     {
+        if (_getDuplicateEmail)
+        {
+            return Task.FromResult<UserAccount?>(
+                AccountCommandFactory.CreateAccount("TestUser", email: "tester@test.com"));
+        }
+
         return Task.FromResult(_defaultTestAccount);
     }
 
@@ -64,6 +94,11 @@ internal class MockAccountRepository : IUserAccountRepository
 
     public Task<UserAccount?> GetByUserNameAsync(string userName)
     {
+        if (_getDuplicateUserName)
+        {
+            return Task.FromResult<UserAccount?>(
+                AccountCommandFactory.CreateAccount("TestUser"));
+        }
         return Task.FromResult(_defaultTestAccount);
     }
 
@@ -84,11 +119,15 @@ internal class MockAccountRepository : IUserAccountRepository
         string resetToken,
         string newPassword)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(IdentityResult.Failed());
     }
 
     public Task<IdentityResult> UpdateAsync(UserAccount userAccount)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(IdentityResult.Failed(new IdentityError
+        {
+            Code = "Test.Error",
+            Description = "Update test failure."
+        }));
     }
 }
