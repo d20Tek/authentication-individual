@@ -1,6 +1,7 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
+using D20Tek.Authentication.Individual.Client.Contracts;
 using System.Security.Claims;
 
 namespace D20Tek.Authentication.Individual.Client.UnitTests.Helpers;
@@ -19,5 +20,20 @@ internal static class AuthorizationFactory
             new Claim(ClaimTypes.Email, "tester@test.com"));
 
         return authContext;
+    }
+
+    public static AuthenticationResponse CreateAuthResponse(
+        string userId = "test-user-id",
+        string userName = "TestUser",
+        string token = "test-access-token",
+        DateTime? expiration = null,
+        string refreshToken = "test-refresh-token")
+    {
+        return new AuthenticationResponse(
+            userId,
+            userName,
+            token,
+            expiration ?? DateTime.UtcNow.AddHours(1),
+            refreshToken);
     }
 }
