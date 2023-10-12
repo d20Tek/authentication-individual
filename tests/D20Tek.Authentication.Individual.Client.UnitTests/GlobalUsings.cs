@@ -7,4 +7,5 @@ global using Microsoft.VisualStudio.TestTools.UnitTesting;
 global using Moq;
 
 global using D20Tek.Authentication.Individual.Client.UnitTests.Helpers;
+global using D20Tek.Minimal.Result;
 

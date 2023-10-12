@@ -36,4 +36,21 @@ internal static class AuthorizationFactory
             expiration ?? DateTime.UtcNow.AddHours(1),
             refreshToken);
     }
+
+    public static AccountResponse CreateAccountResponse(
+        string userId = "test-user-id",
+        string userName = "TestUser",
+        string givenName = "Tester",
+        string familyName = "McTest",
+        string email = "tester@test.com",
+        string phone = "555-555-5555")
+    {
+        return new AccountResponse(
+            userId,
+            userName,
+            givenName,
+            familyName,
+            email,
+            phone);
+    }
 }
