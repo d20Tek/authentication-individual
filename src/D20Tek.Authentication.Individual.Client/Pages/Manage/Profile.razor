@@ -12,14 +12,14 @@
                 <label class="form-label" for="UserName">User Name</label>
             </div>
             <div class="form-floating mb-3">
-                <InputText class="form-control" @bind-Value=input.GivenName
+                <InputText id="given-name-input" class="form-control" @bind-Value=input.GivenName
                            autocomplete="first-name" aria-required="true"
                            placeholder="name" />
                 <label class="form-label" for="given-name">First Name</label>
                 <ValidationMessage For=@(() => input.GivenName) />
             </div>
             <div class="form-floating mb-3">
-                <InputText class="form-control" @bind-Value=input.FamilyName
+                <InputText id="family-name-input" class="form-control" @bind-Value=input.FamilyName
                            autocomplete="last-name" aria-required="true"
                            placeholder="name" />
                 <label class="form-label" for="family-name">Last Name</label>
@@ -27,21 +27,21 @@
             </div>
 
             <div class="form-floating mb-3">
-                <InputText class="form-control" type="email" @bind-Value=input.Email
+                <InputText id="email-input" class="form-control" type="email" @bind-Value=input.Email
                            autocomplete="email" aria-required="true"
                            placeholder="name@example.com" />
                 <label class="form-label" for="email">Email</label>
                 <ValidationMessage For=@(() => input.Email) />
             </div>
             <div class="form-floating mb-3">
-                <InputText class="form-control" type="tel" @bind-Value=input.PhoneNumber
+                <InputText id="phone-input" class="form-control" type="tel" @bind-Value=input.PhoneNumber
                            autocomplete="phone" aria-required="true"
                            placeholder="Enter your phone number" />
                 <label class="form-label" for="phone">Phone number</label>
                 <ValidationMessage For=@(() => input.PhoneNumber) />
             </div>
 
-            <button id="register-submit" type="submit" class="w-100 btn btn-lg btn-primary">
+            <button id="update-submit" type="submit" class="w-100 btn btn-lg btn-primary">
                 Save
             </button>
         </EditForm>
