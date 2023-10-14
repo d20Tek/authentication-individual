@@ -20,17 +20,20 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
     private readonly ILocalStorageService _localStorage;
     private readonly AuthenticationState _anonymous = new (new ClaimsPrincipal());
     private readonly JwtClientSettings _jwtSettings;
+    private readonly JwtSecurityTokenHandler _jwtTokenHandler;
     private readonly ILogger _logger;
 
     public JwtAuthenticationProvider(
         HttpClient httpClient,
         IOptions<JwtClientSettings> jwtOptions,
         ILocalStorageService localStorage,
+        JwtSecurityTokenHandler jwtTokenHandler,
         ILogger<JwtAuthenticationProvider> logger)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
         _jwtSettings = jwtOptions.Value;
+        _jwtTokenHandler = jwtTokenHandler;
         _logger = logger;
     }
 
@@ -91,10 +94,8 @@ internal sealed class JwtAuthenticationProvider : AuthenticationStateProvider
                     Encoding.UTF8.GetBytes(_jwtSettings.Secret))
             };
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-
             // validate and decode the token
-            ClaimsPrincipal claimsPrincipal = tokenHandler.ValidateToken(
+            ClaimsPrincipal claimsPrincipal = _jwtTokenHandler.ValidateToken(
                 token,
                 tokenValidationParameters,
                 out SecurityToken validatedToken);

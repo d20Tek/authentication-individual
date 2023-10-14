@@ -1,7 +1,12 @@
 ﻿//---------------------------------------------------------------------------------------------------------------------
 // Copyright (c) d20Tek.  All rights reserved.
 //---------------------------------------------------------------------------------------------------------------------
+using Blazored.LocalStorage;
 using D20Tek.Authentication.Individual.Client.Contracts;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace D20Tek.Authentication.Individual.Client.UnitTests.Helpers;
@@ -20,6 +25,53 @@ internal static class AuthorizationFactory
             new Claim(ClaimTypes.Email, "tester@test.com"));
 
         return authContext;
+    }
+
+    public static AuthenticationService CreateAuthenticationService(
+        HttpClient httpClient)
+    {
+        var jwtSettings = new JwtClientSettings
+        {
+            Audience = "d20Tek.Auth.Sample",
+            Issuer = "d20Tek.AuthenticationService",
+            Secret = "d20Tek.Auth.Sample.Api.95B90643-7DBF-457D-B393-F02F9EA138C2"
+        };
+        var jwtOptions = new Mock<IOptions<JwtClientSettings>>();
+        jwtOptions.Setup(x => x.Value).Returns(jwtSettings);
+
+        SecurityToken validatedToken;
+        var mockTokenHandler = new Mock<JwtSecurityTokenHandler>();
+        mockTokenHandler.Setup(x => x.ValidateToken(
+                            It.IsAny<string>(),
+                            It.IsAny<TokenValidationParameters>(),
+                            out validatedToken))
+                        .Returns(ClaimsPrincipalFactory.CreateAuthenticatedPrincipal());
+
+        var mockStorage = new Mock<ILocalStorageService>();
+        var loggerProvider = new Mock<ILogger<JwtAuthenticationProvider>>().Object;
+        var stateProvider = new JwtAuthenticationProvider(
+            httpClient,
+            jwtOptions.Object,
+            mockStorage.Object,
+            mockTokenHandler.Object,
+            loggerProvider);
+
+        var endpointSettings = new ServiceEndpointSettings
+        {
+            Authentication = "https://localhost:7296/api/v1/account",
+            ServiceBase = "https://localhost:7296"
+        };
+        var options = new Mock<IOptions<ServiceEndpointSettings>>();
+        options.Setup(x => x.Value).Returns(endpointSettings);
+
+        var loggerService = new Mock<ILogger<AuthenticationService>>().Object;
+    
+        return new AuthenticationService(
+            httpClient,
+            stateProvider,
+            mockStorage.Object,
+            options.Object,
+            loggerService);
     }
 
     public static AuthenticationResponse CreateAuthResponse(
