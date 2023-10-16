@@ -109,14 +109,13 @@ internal static class AuthorizationFactory
         string userId = "test-user-id",
         string userName = "TestUser",
         string token = "test-access-token",
-        DateTime? expiration = null,
         string refreshToken = "test-refresh-token")
     {
         return new AuthenticationResponse(
             userId,
             userName,
             token,
-            expiration ?? DateTime.UtcNow.AddHours(1),
+            DateTime.UtcNow.AddHours(1),
             refreshToken);
     }
 
