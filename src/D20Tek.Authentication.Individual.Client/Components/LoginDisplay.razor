@@ -4,7 +4,7 @@
 <AuthorizeView>
     <Authorized>
         <a class="mx-2" href="/authentication/profile">
-            Hello, @(context.User.Identity?.Name ?? "Guest")!
+            Hello, @(context.User.Identity!.Name)!
         </a>|
         <a class="mx-2" href="/authentication/logout">Log out</a>
     </Authorized>

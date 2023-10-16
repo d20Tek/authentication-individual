@@ -22,7 +22,7 @@ public partial class Profile
                 Email = account.Email,
                 PhoneNumber = account.PhoneNumber
             },
-            error => message = $"[{error.Code}]: {error.Message}");
+            error => message = error.ToString());
     }
 
     private async Task OnPostAsync()

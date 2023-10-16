@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace D20Tek.Authentication.Individual.Client;
 
@@ -19,6 +20,7 @@ public static class DependencyInjection
 
         services.AddScoped<AuthenticationStateProvider, JwtAuthenticationProvider>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddSingleton<JwtSecurityTokenHandler>();
         services.AddAuthorizationCore();
         services.AddBlazoredLocalStorage();
 

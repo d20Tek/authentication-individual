@@ -65,13 +65,13 @@ internal sealed class AuthenticationService : ServiceBase, IAuthenticationServic
     public async Task<Result<AccountResponse>> GetAccountAsync()
     {
         var serviceUrl = $"{_baseUrl}{Configuration.Authentication.Get}";
-        var result = await _httpClient.GetFromJsonAsync<AccountResponse>(serviceUrl);
-        if (result is null)
+        var result = await _httpClient.GetAsync(serviceUrl);
+        if (result.IsSuccessStatusCode is false)
         {
             return Errors.AuthenticationService.AccountNotFound;
         }
 
-        return result;
+        return (await result.Content.ReadFromJsonAsync<AccountResponse>())!;
     }
 
     public async Task<Result<ResetResponse>> GetPasswordResetTokenAsync(GetResetTokenRequest request)
