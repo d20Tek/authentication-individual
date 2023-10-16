@@ -73,26 +73,16 @@ internal abstract class ServiceBase
     {
         if (message.IsSuccessStatusCode is false)
         {
-            var problem = await message.Content.ReadFromJsonAsync<ProblemDetails>();
-            if (problem is not null)
-            {
-                var result = problem.ToResult<T>();
-                Console.WriteLine("AuthenticationService error:");
-                Console.WriteLine(problem.ToString());
+            var problem = (await message.Content.ReadFromJsonAsync<ProblemDetails>())!;
 
-                return result;
-            }
+            var result = problem.ToResult<T>();
+            Console.WriteLine("AuthenticationService error:");
+            Console.WriteLine(problem.ToString());
 
-            return Errors.AuthenticationService.CannotParseProblem;
+            return result;
         }
 
-        var response = await message.Content.ReadFromJsonAsync<T>();
-        if (response is null)
-        {
-            return Errors.AuthenticationService.CannotConvertPayload;
-        }
-
-        return response;
+        return (await message.Content.ReadFromJsonAsync<T>())!;
     }
 
     private void LogResult(string operationName, Res.Result result)

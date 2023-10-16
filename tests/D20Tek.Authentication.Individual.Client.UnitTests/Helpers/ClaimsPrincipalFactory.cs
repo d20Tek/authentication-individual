@@ -17,7 +17,7 @@ internal static class ClaimsPrincipalFactory
             new Claim(ClaimTypes.Surname, "family-name"),
             new Claim(ClaimTypes.Email, "tester@test.com")
         };
-        var identity = new ClaimsIdentity(claims);
+        var identity = new ClaimsIdentity(claims, "JwtAuth");
 
         return new ClaimsPrincipal(identity);
     }

@@ -10,6 +10,12 @@ namespace D20Tek.Authentication.Individual.Client.UnitTests.Helpers;
 
 internal class HttpClientFactory
 {
+    public static HttpClient CreateEmptyHttpClient()
+    {
+        var httpClient = new Mock<HttpClient>();
+        return httpClient.Object;
+    }
+
     public static HttpClient CreateHttpClientWithResponse<T>(
         T response,
         HttpStatusCode statusCode = HttpStatusCode.OK)

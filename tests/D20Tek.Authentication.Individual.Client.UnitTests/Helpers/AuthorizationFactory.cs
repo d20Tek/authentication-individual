@@ -27,8 +27,10 @@ internal static class AuthorizationFactory
         return authContext;
     }
 
-    public static AuthenticationService CreateAuthenticationService(
-        HttpClient httpClient)
+    public static JwtAuthenticationProvider CreateJwtAuthenticationProvider(
+        HttpClient httpClient,
+        string? savedAccessToken = null,
+        bool validateTokenSucceeds = true)
     {
         var jwtSettings = new JwtClientSettings
         {
@@ -41,20 +43,49 @@ internal static class AuthorizationFactory
 
         SecurityToken validatedToken;
         var mockTokenHandler = new Mock<JwtSecurityTokenHandler>();
-        mockTokenHandler.Setup(x => x.ValidateToken(
-                            It.IsAny<string>(),
-                            It.IsAny<TokenValidationParameters>(),
-                            out validatedToken))
-                        .Returns(ClaimsPrincipalFactory.CreateAuthenticatedPrincipal());
+        if (validateTokenSucceeds)
+        {
+            mockTokenHandler.Setup(x => x.ValidateToken(
+                                It.IsAny<string>(),
+                                It.IsAny<TokenValidationParameters>(),
+                                out validatedToken))
+                            .Returns(ClaimsPrincipalFactory.CreateAuthenticatedPrincipal());
+        }
+        else
+        {
+            mockTokenHandler.Setup(x => x.ValidateToken(
+                                It.IsAny<string>(),
+                                It.IsAny<TokenValidationParameters>(),
+                                out validatedToken))
+                            .Throws<InvalidOperationException>();
+        }
 
         var mockStorage = new Mock<ILocalStorageService>();
+        if (savedAccessToken is not null)
+        {
+            mockStorage.Setup(x => x.GetItemAsync<string>(
+                            "accessToken",
+                            It.IsAny<CancellationToken>()))
+                       .ReturnsAsync(savedAccessToken);
+        }
+
         var loggerProvider = new Mock<ILogger<JwtAuthenticationProvider>>().Object;
+
         var stateProvider = new JwtAuthenticationProvider(
             httpClient,
             jwtOptions.Object,
             mockStorage.Object,
             mockTokenHandler.Object,
             loggerProvider);
+
+        return stateProvider;
+    }
+
+    public static AuthenticationService CreateAuthenticationService(
+        HttpClient httpClient)
+    {
+        var mockStorage = new Mock<ILocalStorageService>();
+        var stateProvider = CreateJwtAuthenticationProvider(httpClient);
 
         var endpointSettings = new ServiceEndpointSettings
         {
