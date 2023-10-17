@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 using D20Tek.Authentication.Individual.Client.Pages;
 using Microsoft.AspNetCore.Components;
-using Moq;
+using Microsoft.Extensions.Options;
 
 namespace D20Tek.Authentication.Individual.Client.UnitTests.Pages;
 
@@ -18,12 +18,15 @@ public class LogoutTests
 
         using var ctx = new TestContext();
         ctx.Services.AddSingleton<IAuthenticationService>(authService);
+        ctx.Services.AddSingleton<IOptions<AuthClientSettings>>(Options.Create(
+            new AuthClientSettings { LogoutUrl = "/test-logout" }));
+
         var nav = ctx.Services.GetRequiredService<NavigationManager>();
 
         // act
         var comp = ctx.RenderComponent<Logout>();
 
         // assert
-        nav.Uri.Should().Be("http://localhost/");
+        nav.Uri.Should().Be("http://localhost/test-logout");
     }
 }
