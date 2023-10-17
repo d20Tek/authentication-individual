@@ -20,8 +20,6 @@ namespace D20Tek.Authentication.Individual;
 
 public static partial class DependencyInjection
 {
-    private const string _defaultDbConnectionKey = "DefaultConnection";
-
     public static IServiceCollection AddIndividualAuthentication(
         this IServiceCollection services,
         ConfigurationManager configuration)

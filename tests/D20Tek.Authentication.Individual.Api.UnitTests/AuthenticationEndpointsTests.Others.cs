@@ -8,6 +8,7 @@ using System.Net.Http.Json;
 using System.Net;
 using D20Tek.Authentication.Individual.Api.UnitTests.Assertions;
 using D20Tek.Authentication.Individual.UseCases.RefreshToken;
+using Microsoft.Extensions.Options;
 
 namespace D20Tek.Authentication.Individual.Api.UnitTests;
 
@@ -24,7 +25,7 @@ public partial class AuthenticationEndpointsTests
         using var client = _factory.CreateAuthenticatedClient(authResult.Token);
 
         var request = new ChangeRoleRequest("TestUser-ChangeRole-1", UserRoles.Admin);
-        var endpoint = new AuthenticationEndpoints();
+        var endpoint = new AuthenticationEndpoints(Options.Create(new AuthApiSettings()));
         var handler = _factory.GetChangeRoleCommandHandler();
 
         // act
@@ -47,8 +48,14 @@ public partial class AuthenticationEndpointsTests
         var authResult = await _factory.RegisterTestUser(local);
         using var client = _factory.CreateAuthenticatedClient(authResult.Token);
 
+        var settings = new AuthApiSettings
+        {
+            EnableOpenApi = false,
+            AuthDbConnectionName = "default"
+        };
+
+        var endpoint = new AuthenticationEndpoints(Options.Create(settings));
         var request = new ChangeRoleRequest("", UserRoles.User);
-        var endpoint = new AuthenticationEndpoints();
         var handler = _factory.GetChangeRoleCommandHandler();
 
         // act
@@ -73,7 +80,7 @@ public partial class AuthenticationEndpointsTests
         using var client = _factory.CreateAuthenticatedClient(authResult.Token);
 
         var request = new ChangeRoleRequest("TestUser-ChangeRole-3", "PowerUser");
-        var endpoint = new AuthenticationEndpoints();
+        var endpoint = new AuthenticationEndpoints(Options.Create(new AuthApiSettings()));
         var handler = _factory.GetChangeRoleCommandHandler();
 
         // act
@@ -108,8 +115,9 @@ public partial class AuthenticationEndpointsTests
     public async Task RefreshToken_WithInvalidUserId_ReturnsNotFound()
     {
         // arrange
+        var local = new AuthenticationWebApplicationFactory(byPassApiSettings: true);
         var token = AuthTokenFactory.GenerateRefreshTokenForRandomUser(_jwtTokenGenerator);
-        using var client = _factory.CreateAuthenticatedClient(token);
+        using var client = local.CreateAuthenticatedClient(token);
 
         // act
         var response = await client.PostAsync(

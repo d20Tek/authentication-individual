@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
 namespace D20Tek.Authentication.Individual.Api;
@@ -23,12 +24,26 @@ internal class AuthenticationEndpoints : ICompositeApiEndpoint
 {
     private readonly AuthenticationResponseMapper _authResponseMapper = new();
     private readonly ResetTokenResponseMapper _resetTokenMapper = new();
+    private readonly AuthApiSettings _apiSettings;
+
+    public AuthenticationEndpoints(IOptions<AuthApiSettings> options)
+    {
+        _apiSettings = options.Value;
+    }
 
     public void MapRoutes(IEndpointRouteBuilder routeBuilder)
     {
         var group = routeBuilder.MapGroup(Configuration.Authentication.BaseUrl)
-            .WithTags(Configuration.Authentication.GroupTag)
-            .WithOpenApi();
+            .WithTags(Configuration.Authentication.GroupTag);
+
+        if (_apiSettings.EnableOpenApi)
+        {
+            group = group.WithOpenApi();
+        }
+        else
+        {
+            group = group.ExcludeFromDescription();
+        }
 
         group.MapPost(Configuration.Register.RoutePattern, RegisterAsync)
             .WithConfiguration(Configuration.Register);

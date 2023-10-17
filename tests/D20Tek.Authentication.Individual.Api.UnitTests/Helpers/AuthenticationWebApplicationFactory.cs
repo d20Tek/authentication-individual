@@ -11,6 +11,7 @@ using D20Tek.Minimal.Result;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 
 namespace D20Tek.Authentication.Individual.Api.UnitTests.Helpers;
@@ -18,10 +19,14 @@ namespace D20Tek.Authentication.Individual.Api.UnitTests.Helpers;
 internal class AuthenticationWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly bool _byPassSqlDb;
+    private readonly bool _byPassApiSettings;
 
-    public AuthenticationWebApplicationFactory(bool byPassSqlDb = true)
+    public AuthenticationWebApplicationFactory(
+        bool byPassSqlDb = true,
+        bool byPassApiSettings = false)
     {
-        _byPassSqlDb = byPassSqlDb;    
+        _byPassSqlDb = byPassSqlDb;   
+        _byPassApiSettings = byPassApiSettings;
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -44,6 +49,25 @@ internal class AuthenticationWebApplicationFactory : WebApplicationFactory<Progr
                 {
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
+            });
+        }
+
+        if (_byPassApiSettings)
+        {
+            builder.ConfigureServices(services =>
+            {
+                // replace the default api settings with test one
+                var descriptor = services.SingleOrDefault(
+                    d => d.ServiceType ==
+                        typeof(IOptions<AuthApiSettings>));
+
+                if (descriptor != null)
+                {
+                    services.Remove(descriptor);
+                }
+
+                var authSettings = new AuthApiSettings { EnableOpenApi = false };
+                services.AddSingleton(Options.Create(authSettings));
             });
         }
     }

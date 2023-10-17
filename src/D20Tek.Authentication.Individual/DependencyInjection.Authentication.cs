@@ -21,9 +21,13 @@ public static partial class DependencyInjection
         this IServiceCollection services,
         ConfigurationManager configuration)
     {
-        var connectionString = configuration.GetConnectionString(_defaultDbConnectionKey) ??
+        var authSettings = new AuthApiSettings();
+        configuration.Bind(nameof(AuthApiSettings), authSettings);
+        services.AddSingleton(Options.Create(authSettings));
+
+        var connectionString = configuration.GetConnectionString(authSettings.AuthDbConnectionName) ??
             throw new InvalidOperationException(
-                $"Connection string '{_defaultDbConnectionKey}' not found.");
+                $"Connection string '{authSettings.AuthDbConnectionName}' not found.");
 
         services.AddDbContext<UserAccountDbContext>(options =>
             options.UseSqlServer(
