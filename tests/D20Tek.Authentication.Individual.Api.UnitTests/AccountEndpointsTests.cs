@@ -5,6 +5,8 @@ using D20Tek.Authentication.Individual.Abstractions;
 using D20Tek.Authentication.Individual.Api.UnitTests.Assertions;
 using D20Tek.Authentication.Individual.Api.UnitTests.Helpers;
 using D20Tek.Authentication.Individual.UseCases.Register;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -43,8 +45,9 @@ public class AccountEndpointsTests
     public async Task GetAccount_WithInvalidAccountId_ReturnsNotFound()
     {
         // arrange
+        var local = new AuthenticationWebApplicationFactory(byPassApiSettings: true);
         var token = AuthTokenFactory.GenerateTokenForRandomUser(_jwtTokenGenerator);
-        using var client = _factory.CreateAuthenticatedClient(token);
+        using var client = local.CreateAuthenticatedClient(token);
 
         // act
         var response = await client.GetAsync("/api/v1/account");
