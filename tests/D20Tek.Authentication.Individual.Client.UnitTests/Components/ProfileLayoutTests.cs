@@ -25,7 +25,7 @@ public class ProfileLayoutTests
   <div class=""sidebar"" >
     <div class=""top-row ps-3 navbar navbar-dark"" >
       <div class=""container-fluid"" >
-        <a class=""navbar-brand"" href="""" >Authentication</a>
+        <a class=""navbar-brand"" href=""/"" >Authentication</a>
         <button title=""Navigation menu"" class=""navbar-toggler""  >
           <span class=""navbar-toggler-icon"" ></span>
         </button>
@@ -34,7 +34,7 @@ public class ProfileLayoutTests
     <div class=""collapse nav-scrollable""  >
       <nav class=""flex-column"" >
         <div class=""nav-item px-3"" >
-          <a href="""" class=""nav-link active"">
+          <a href=""/"" class=""nav-link active"">
             <span class=""oi oi-home"" aria-hidden=""true"" ></span>
             Home
           </a>
@@ -96,7 +96,7 @@ public class ProfileLayoutTests
   <div class=""sidebar"" >
     <div class=""top-row ps-3 navbar navbar-dark"" >
       <div class=""container-fluid"" >
-        <a class=""navbar-brand"" href="""" >Authentication</a>
+        <a class=""navbar-brand"" href=""/"" >Authentication</a>
         <button title=""Navigation menu"" class=""navbar-toggler""  >
           <span class=""navbar-toggler-icon"" ></span>
         </button>
@@ -105,7 +105,7 @@ public class ProfileLayoutTests
     <div class=""collapse nav-scrollable""  >
       <nav class=""flex-column"" >
         <div class=""nav-item px-3"" >
-          <a href="""" class=""nav-link active"">
+          <a href=""/"" class=""nav-link active"">
             <span class=""oi oi-home"" aria-hidden=""true"" ></span>
             Home
           </a>
@@ -172,7 +172,7 @@ public class ProfileLayoutTests
   <div class=""sidebar"" >
     <div class=""top-row ps-3 navbar navbar-dark"" >
       <div class=""container-fluid"" >
-        <a class=""navbar-brand"" href="""" >Authentication</a>
+        <a class=""navbar-brand"" href=""/"" >Authentication</a>
         <button title=""Navigation menu"" class=""navbar-toggler""  >
           <span class=""navbar-toggler-icon"" ></span>
         </button>
@@ -181,7 +181,7 @@ public class ProfileLayoutTests
     <div class=""nav-scrollable""  >
       <nav class=""flex-column"" >
         <div class=""nav-item px-3"" >
-          <a href="""" class=""nav-link active"">
+          <a href=""/"" class=""nav-link active"">
             <span class=""oi oi-home"" aria-hidden=""true"" ></span>
             Home
           </a>

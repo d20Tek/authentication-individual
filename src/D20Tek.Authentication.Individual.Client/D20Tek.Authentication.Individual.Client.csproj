@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>D20Tek.Authentication.Individual.Client</Title>
-    <Version>1.0.3-prerelease</Version>
+    <Version>1.0.4-prerelease</Version>
     <Authors>d20Tek</Authors>
     <Description> An implementation of the ASP.NET individual authentication using Identity services to build the SQL database, implement a WebApi that exposes all authentication behaviors, and client library to consume the service and provide basic page implementations.</Description>
     <Copyright>Copyright (c) d20Tek.  All rights reserved.</Copyright>

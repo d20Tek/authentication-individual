@@ -43,4 +43,24 @@ public class SettingsTests
         settings.Authentication.Should().Be("test-auth-baseurl");
         settings.ServiceBase.Should().Be("test-service-baseurl");
     }
+
+    [TestMethod]
+    public void AuthClientSettingsProperties_GetSetValues()
+    {
+        // arrange
+
+        // act
+        var settings = new AuthClientSettings
+        {
+            AppTitle = "TestApp",
+            AppHomeUrl = "/home-test",
+            LogoutUrl = "/logout-test"
+        };
+
+        // assert
+        settings.Should().NotBeNull();
+        settings.AppTitle.Should().Be("TestApp");
+        settings.AppHomeUrl.Should().Be("/home-test");
+        settings.LogoutUrl.Should().Be("/logout-test");
+    }
 }

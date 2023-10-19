@@ -39,6 +39,10 @@ public static class DependencyInjection
         configuration.Bind(nameof(ServiceEndpointSettings), endpointSettings);
         services.AddSingleton(Options.Create(endpointSettings));
 
+        var authClientSettings = new AuthClientSettings();
+        configuration.Bind(nameof(AuthClientSettings), authClientSettings);
+        services.AddSingleton(Options.Create(authClientSettings));
+
         return services;
     }
 }
